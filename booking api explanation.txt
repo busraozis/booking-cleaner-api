@@ -1,0 +1,70 @@
+Booking Cleaner API
+-------------------
+
+In this document, I would like to explain my design over the assignment to create a Restful API.
+First of all, I ignored the frontend implementation and created services that returned json formatted responses for some frontend team.
+I splitted the booking process to 3 services making the following assumptions:
+
+* I designed Cleaner table, Company table, Booking table and Customer table. I assumed that Cleaner, Company and Customer
+tables were already populated and I ignored to write services that created records for these 3 tables. My main goal
+was to populate the Booking table. Here are the designed columns for the tables:
+
+Cleaner 
+-------
+id (Integer): unique indicator of the cleaner in our system.
+companyId(Integer): the id of the company which the cleaner currently works for.
+name(text): the name of the cleaner
+
+Company
+-------
+id(Integer): unique indicator of the company in our system.
+name(text): the name of the company
+
+Customer
+--------
+id(Integer): unique indicator of the customer in our system.
+name(text): the name of the customer
+address(text): the address of the customer
+
+Booking
+-------
+id(Integer): unique indicator of the booking in our system.
+cleanerId(Integer): indicator of the cleaner assigned to the booking
+customerId(Integer): indicator of the customer who made the booking
+startTime(DateTime): starting time of the requested cleaning process.
+endTime(DateTime): ending time of the requested cleaning process.
+
+Service 1: availableCleaners
+* I imagined that the customer would start to book chosing the date and time that she wanted from a calendar and booking duration served by frontend.
+Then the front end team would send these starting date time and duration to my rest api and request the available cleaners for the requested time and duration.
+My availableCleaners service validates if the requested starting time is not Friday and inside the working hours(08.00-22.00) and duration is 2 or 4 hours, then
+returns a list of available cleaners in the system. Here is how the available cleaners are found:
+
+- First, all the cleaners in the Cleaner table are selected.
+- Second, busy cleaners are found by selecting the cleanerIds from the Booking table where the Booking startTime is less than requested ending time and
+Booking endTime is greated than the requested startTime. This formula gives the cleaners that are busy at any time between the requested starttime and duration.
+-Finally, subsracting busy cleaners from all cleaners, we get the availabe cleaners list.
+
+Service 2: bookingCreate
+* After, returning the available cleaners list to front, front end would show the list to the customer and customer
+would be able to choose his favourite cleaner among all. With chosen cleaner, start time and duration, the front end 
+would be ready to make a request for creating a booking and send me this data for the process using my bookingcreate service.
+This service makes the validations for that starttime and duration, too. It also checks if there exists another booking with a cleaner that works for
+different company from the chosen cleaner during the requested booking times made by this customer and if it exists, it returns a json response as follows:
+"error: ": "There exists a booking with a cleaner from another company during selected hours. Booking cannot be made."
+If everything is perfect, Booking record will be created to the database.
+
+Service 3: cleanerBusyTimes
+I also supplied a service that returns the extracts occupied times for a requested cleaner from the Booking table. Frontend 
+team may use this service in order to show the occupied times for a cleaner in the calendar.
+
+Thus, I hope that I manage to cover the following restrictions in my implementation:
+1. Friday is a holiday for cleaners.
+2. Cleaners working hours are between 08.00-22.00.
+3. Cleaners can complete multiple bookings each day according to their availability.
+4. A booking can have only 2 or 4 hours duration.
+5. Every cleaner works for a company. Cleaners that work different companies cannot work together.
+
+Finally, I would like to add that this was my first project on Symfony framework. There may be some points that I missed
+during the project implementation but I have the belief that I will be correcting those points as I increase my knowledge
+in progress of time.

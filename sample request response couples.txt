@@ -1,0 +1,113 @@
+/availablecleaners service
+request 1: http://localhost:8080/booking-cleaner-api/public/availablecleaners?startTime=2020-08-11%2014:00:00&duration=4
+response 1:
+{
+  "availableCleaners": [
+    [
+      {
+        "id": 1,
+        "companyId": 1,
+        "name": "cleanerA"
+      }
+    ],
+    [
+      {
+        "id": 3,
+        "companyId": 2,
+        "name": "cleanerC"
+      }
+    ]
+  ]
+}
+
+
+/cleanerbusytimes service
+request 1: http://localhost:8080/booking-cleaner-api/public/cleanerbusytimes?cleanerId=2
+
+response 1:
+{
+  "Cleaner 2's busy times: ": [
+    {
+      "startTime": {
+        "date": "2020-08-10 10:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "Europe/Berlin"
+      },
+      "endTime": {
+        "date": "2020-08-10 14:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "Europe/Berlin"
+      }
+    },
+    {
+      "startTime": {
+        "date": "2020-08-10 20:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "Europe/Berlin"
+      },
+      "endTime": {
+        "date": "2020-08-10 22:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "Europe/Berlin"
+      }
+    },
+    {
+      "startTime": {
+        "date": "2020-08-11 12:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "Europe/Berlin"
+      },
+      "endTime": {
+        "date": "2020-08-11 16:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "Europe/Berlin"
+      }
+    }
+  ]
+}
+
+/bookingcreate service
+request 1: http://localhost:8080/booking-cleaner-api/public/bookingcreate?cleanerId=3&startTime=2020-08-14%2012:00:00&duration=2&customerId=1
+response 1:
+{
+  "error: ": "Friday is off day for cleaners."
+}
+
+request 2: http://localhost:8080/booking-cleaner-api/public/bookingcreate?cleanerId=3&startTime=2020-08-15%2012:00:00&duration=2&customerId=1
+response 2:
+{
+  "Created Booking Details: ": {
+    "bookingId": 13,
+    "cleanerId": 3,
+    "customerId": 1,
+    "startTime": {
+      "date": "2020-08-15 12:00:00.000000",
+      "timezone_type": 3,
+      "timezone": "Europe/Berlin"
+    },
+    "endTime": {
+      "date": "2020-08-15 14:00:00.000000",
+      "timezone_type": 3,
+      "timezone": "Europe/Berlin"
+    }
+  }
+}
+
+
+request 3: http://localhost:8080/booking-cleaner-api/public/bookingcreate?cleanerId=3&startTime=2020-08-16%2012:00:00&duration=5&customerId=1
+response 3: 
+{
+  "error: ": "Duration should be 2 or 4"
+}
+
+request 4: http://localhost:8080/booking-cleaner-api/public/bookingcreate?cleanerId=3&startTime=2020-08-16%2021:00:00&duration=2&customerId=1
+response 4:
+{
+  "error: ": "End time should not pass 10 pm."
+}
+
+request 5: http://localhost:8080/booking-cleaner-api/public/bookingcreate?cleanerId=3&startTime=2020-08-16%2007:00:00&duration=2&customerId=1
+response 5:
+{
+  "error: ": "Start time should not be before 8 am."
+}

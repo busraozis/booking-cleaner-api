@@ -1,0 +1,19 @@
+index:
+    path: /
+    controller: App\Controller\CleanerController::index
+
+cleaner:
+    path: /cleaner
+    controller: App\Controller\CleanerController::cleaner
+
+availableCleaners:
+    path: /availablecleaners
+    controller: App\Controller\CleanerController::availableCleaners
+
+bookingCreate:
+    path: /bookingcreate
+    controller: App\Controller\BookingController::bookingCreate
+
+cleanerBusyTimes:
+    path: /cleanerbusytimes
+    controller: App\Controller\CleanerController::cleanerBusyTimes
