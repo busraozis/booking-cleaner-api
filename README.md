@@ -15,3 +15,5 @@ it creates a booking record in db with this inputs.
 
 The design approach with more detail is available in "booking api explanation.txt" and a couple of request and response examples foreach service
 can be found in "sample request response couples.txt".
+
+And you can also find the sample db that stores the data for my work in justmob.sql.
